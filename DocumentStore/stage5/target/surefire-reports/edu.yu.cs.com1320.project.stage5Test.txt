@@ -1,0 +1,20 @@
+-------------------------------------------------------------------------------
+Test set: edu.yu.cs.com1320.project.stage5Test
+-------------------------------------------------------------------------------
+Tests run: 26, Failures: 2, Errors: 1, Skipped: 0, Time elapsed: 0.404 s <<< FAILURE! - in edu.yu.cs.com1320.project.stage5Test
+edu.yu.cs.com1320.project.stage5Test.stage5PushToDiskViaMaxDocCount  Time elapsed: 0.045 s  <<< ERROR!
+java.lang.NullPointerException
+	at edu.yu.cs.com1320.project.stage5Test.pushAboveMaxViaPutNew(stage5Test.java:144)
+	at edu.yu.cs.com1320.project.stage5Test.stage5PushToDiskViaMaxDocCount(stage5Test.java:123)
+
+edu.yu.cs.com1320.project.stage5Test.stage5PushToDiskViaMaxDocCountBringBackInViaDeleteAndSearch  Time elapsed: 0.058 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: doc1 should be back in memory ==> expected: not <null>
+	at edu.yu.cs.com1320.project.stage5Test.deleteDocInMemoryBringInDocFromDisk(stage5Test.java:201)
+	at edu.yu.cs.com1320.project.stage5Test.stage5PushToDiskViaMaxDocCountBringBackInViaDeleteAndSearch(stage5Test.java:164)
+
+edu.yu.cs.com1320.project.stage5Test.stage5PushToDiskViaMaxDocCountViaUndoDelete  Time elapsed: 0.005 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: doc1 should've been written out to disk, but was not: contents were null ==> expected: not <null>
+	at edu.yu.cs.com1320.project.stage5Test.checkContents(stage5Test.java:110)
+	at edu.yu.cs.com1320.project.stage5Test.overLimitViaUndo(stage5Test.java:233)
+	at edu.yu.cs.com1320.project.stage5Test.stage5PushToDiskViaMaxDocCountViaUndoDelete(stage5Test.java:214)
+

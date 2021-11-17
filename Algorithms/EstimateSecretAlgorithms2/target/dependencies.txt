@@ -1,0 +1,9 @@
+digraph "edu.yu.introtoalgs:SecretAlgorithms:jar:1.0-SNAPSHOT" { 
+	"edu.yu.introtoalgs:SecretAlgorithms:jar:1.0-SNAPSHOT" -> "junit:junit:jar:4.11:test" ; 
+	"edu.yu.introtoalgs:SecretAlgorithms:jar:1.0-SNAPSHOT" -> "edu.yu.introtoalgs:SecretAlgorithms:jar:1.0:system" ; 
+	"junit:junit:jar:4.11:test" -> "org.hamcrest:hamcrest-core:jar:1.3:test" ; 
+ } digraph "edu.yu.introtoalgs:SecretAlgorithms:jar:1.0-SNAPSHOT" { 
+	"edu.yu.introtoalgs:SecretAlgorithms:jar:1.0-SNAPSHOT" -> "junit:junit:jar:4.11:test" ; 
+	"edu.yu.introtoalgs:SecretAlgorithms:jar:1.0-SNAPSHOT" -> "edu.yu.introtoalgs:SecretAlgorithms:jar:1.0:system" ; 
+	"junit:junit:jar:4.11:test" -> "org.hamcrest:hamcrest-core:jar:1.3:test" ; 
+ } 
