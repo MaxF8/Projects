@@ -1,0 +1,255 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+    <title>Employee Portal</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        body {
+            background-color: rgb(210, 255, 200);
+            margin: 20px;
+            font-family: 'Open Sans', sans-serif;
+
+        }
+        div {
+            font-size: 18px;
+            margin-top: 5px;
+        }
+        #see_below{
+            font-size: 15px;
+        }
+        #underline{
+            padding-bottom:15px;
+            border-bottom: 1px solid black;
+        }
+        #underline2{
+            padding-bottom:5px;
+            border-bottom: 1px solid black;
+        }
+        #log_back_in{
+            font-size: 14px;
+        }
+        #id{
+            width: 50px;
+        }
+        #message {
+            display: none;
+        }
+        #id_text {
+            display: none;
+        }
+        #table{
+            padding-top:5px;
+            width: 75%;
+            height: 70%;
+            justify-content: center;
+             padding-left: 12.5%;
+            padding-right: 12.5%;
+        }
+         table {
+            border: 1px solid rgba(0, 0, 0, 0.5);
+
+        }
+        tr:nth-child(even) {
+            background-color: rgb(230, 230, 230);
+        }
+        tr:nth-child(odd) {
+            background-color: white;
+        }
+        #first_name, #last_name, #current_status, #department {
+            color: blue
+        }
+        h2 {
+            font-size: 20px;
+        }
+
+    #button {
+        text-align: center;
+       -webkit-text-stroke-width: 0px;
+       -moz-appearance: none;
+       -webkit-appearance: none;
+       -ms-appearance: none;
+       appearance: none;
+       -moz-transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+       -webkit-transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+       -ms-transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+       transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+       background-color: #2da0da;
+       border-radius: 6px;
+       border: 0;
+       cursor: pointer;
+       display: inline-block;
+       font-weight: 400;
+       height: 3em;
+       line-height: 3em;
+       padding: 0 2em;
+       text-align: center;
+       text-decoration: none;
+       white-space: nowrap;
+       font-family: 'Open Sans', sans-serif;
+       color:white;
+       margin: 10px;
+
+   }
+   #button:hover {
+       background-color: #39ade7ce;
+
+   }
+
+   #button:active {
+       background-color: #39ade775;
+   }
+   #button:active  {
+       -moz-transform: scale(0.95);
+       -webkit-transform: scale(0.95);
+       -o-transform: scale(0.95);
+       -ms-transform: scale(0.95);
+       transform: scale(0.95);
+   }
+        .center {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            min-height: 100%;
+            padding-top: 20px;
+        }
+
+        #container {
+            -webkit-border-radius: 10px 10px 10px 10px;
+            border-radius: 10px 10px 10px 10px;
+            background: #fff;
+            width: 90%;
+            height: 90%;
+            position: relative;
+            padding-top: 0px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-bottom: 10px;
+            -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+            box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        #open{
+            font-size: 17px;
+        }
+    </style>
+</head>
+<body onload="
+const results = JSON.parse(document.getElementById('message').innerHTML)[0];
+var _table_ = document.createElement('table'),
+    _tr_ = document.createElement('tr'),
+    _th_ = document.createElement('th'),
+    _td_ = document.createElement('td');
+// Builds the HTML Table out of myList json data from Ivy restful service.
+function buildHtmlTable(arr) {
+    var table = _table_.cloneNode(false),
+        columns = addAllColumnHeaders(arr, table);
+    for (var i = 0, maxi = arr.length; i < maxi; ++i) {
+        var tr = _tr_.cloneNode(false);
+        for (var j = 0, maxj = columns.length; j < maxj; ++j) {
+            var td = _td_.cloneNode(false);
+            cellValue = arr[i][columns[j]];
+            td.appendChild(document.createTextNode(arr[i][columns[j]] || ''));
+            if (td.textContent.substring(0, 22) == ('https://www.google.com')) {
+                td.innerHTML = '<a target=\'_blank\' href=\'' + td.textContent + '\'>Location</a>';
+            } else if (td.textContent.substring(0, 5) == ('https')) {
+                var links = td.textContent.split('|');
+                var linkText = '';
+                for (var k = 0; k < links.length - 1; k++) {
+                    linkText += '<a href=\'' + links[k] + '\'>Image' + (k + 1) + '</a> '
+                }
+                td.innerHTML = linkText;
+            }
+            tr.appendChild(td);
+        }
+        table.appendChild(tr);
+    }
+    return table;
+}
+// Adds a header row to the table and returns the set of columns.
+// Need to do union of keys from all records as some records may not contain
+// all records
+function addAllColumnHeaders(arr, table) {
+    var columnSet = [],
+        tr = _tr_.cloneNode(false);
+    for (var i = 0, l = arr.length; i < l; i++) {
+        for (var key in arr[i]) {
+            if (arr[i].hasOwnProperty(key) && columnSet.indexOf(key) === -1) {
+                columnSet.push(key);
+                var th = _th_.cloneNode(false);
+                th.appendChild(document.createTextNode(key));
+                tr.appendChild(th);
+            }
+        }
+    }
+    table.appendChild(tr);
+    return columnSet;
+}
+const element = document.getElementById('table');
+element.appendChild(buildHtmlTable(results));">
+<div class="center">
+    <div id="container">
+        <div th:if="${employee}">
+            <h2 id ="employee" th:text="${employee}"/>
+        </div><div><a href="/"><button id ="button">Home</button></a>
+    </div>
+        <b><div id ="employees"> Welcome,
+            <span th:if="${first_name}">
+            <text id ="first_name" th:text="${first_name}"></text>
+            </span>
+            <span th:if="${last_name}">
+            <text id="last_name" th:text="${last_name}"></text>.
+            </span>
+        </div>
+            <div id ="underline">Your department is:
+                <span th:if="${department}">
+                <text id ="department" th:text="${department}"></text>.
+                </span>
+                <span> Your current status is: </span>
+                <span th:if="${current_status}">
+            <text id="current_status" th:text="${current_status}"></text>.
+            </span>
+            </div></b>
+        <div id ="underline2">
+            If you would like to browse current issues, select "Find Issue"
+            <span id ="log_back_in">(You will need to log back in)</span>
+            <a href="find"><button id="button">Find Issue</button></a>
+        </div>
+        <span id ="issue_below">
+            Otherwise, choose an issue to undertake from the following below:
+        </span>
+        <div id = "see_below"><b>(If you aren't currently working on an issue, see below for all "Open" issues in your department.<br>
+            If you are working on an issue, you will see an "In Progress" issue.)</b></div>
+        <span th:if="${message}">
+                <h3 id ="message" th:text="${message}"></h3>
+            </span>
+        <div id ="table">
+        </div>
+        <form th:action="@{/employee}" method="post">
+            <div>
+                Select "In Progress" to take up an issue or "Complete" if the issue has been resolved.  <div id="open">Alternatively, if you want to withdraw from an already "In Progress" issue, select "Open".</div>
+                <select name="status" id="status">
+                    <option value="Open">Open</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Complete">Complete</option>
+                </select>
+                <input type="hidden" value =""  name="employee_id" id="employee_id">
+            </div>
+            <div>
+                <label for="id">Select Issue ID: </label>
+                <input type="number" name="id" placeholder="ID" id="id" min="1" required>
+            </div>
+            <input id ="button" type="submit">
+            <text id ="id_text" th:text="${employee_id}"></text>
+            <script>
+                document.getElementById("employee_id").value = document.getElementById("id_text").innerHTML;
+            </script>
+        </form>
+    </div>
+</div>
+</body>
+</html>

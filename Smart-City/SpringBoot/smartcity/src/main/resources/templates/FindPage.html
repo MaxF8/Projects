@@ -1,0 +1,278 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEMFMGUS0w_pLlpBBUVwmNTP2FyECsmkE"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+    <title>Find Issue</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        body {
+            background-color: rgb(210, 255, 200);
+            font-family: 'Open Sans', sans-serif;
+
+        }
+        #header {
+            color: rgb(0, 0, 0);
+            text-align: center;
+        }
+        h1{
+            padding-bottom:15px;
+            border-bottom: 1px solid black;
+        }
+        div, input, select {
+            margin-top: 10px;
+        }
+        #submit {
+            padding: 20px;
+            margin: 10px;
+            background-color: rgb(255, 255, 210);
+            border-radius: 10px;
+        }
+        #submit:hover {
+            cursor: pointer;
+            background-color: rgb(230, 230, 190);
+        }
+        #button-container {
+            text-align: center;
+        }
+        #submit {
+            margin: 10px;
+            background-color: rgb(255, 255, 210);
+            border-radius: 10px;
+        }
+        #submit:hover {
+            cursor: pointer;
+            background-color: rgb(230, 230, 190);
+        }
+
+        #submit {
+             text-align: center;
+            -webkit-text-stroke-width: 0px;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            -ms-appearance: none;
+            appearance: none;
+            -moz-transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+            -webkit-transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+            -ms-transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+            background-color: #2da0da;
+            border-radius: 6px;
+            border: 0;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: 400;
+            height: 2.85em;
+            line-height: 3em;
+            padding: 0 2em;
+            text-align: center;
+            text-decoration: none;
+            white-space: nowrap;
+            font-family: 'Open Sans', sans-serif;
+            color:white;
+
+
+        }
+
+        #submit:hover {
+            background-color: #39ade7ce;
+
+        }
+
+        #submit:active {
+            background-color: #39ade775;
+        }
+        input[type=button]:active,input[type=submit]:active  {
+            -moz-transform: scale(0.95);
+            -webkit-transform: scale(0.95);
+            -o-transform: scale(0.95);
+            -ms-transform: scale(0.95);
+            transform: scale(0.95);
+        }
+        #map {
+            height: 220px;
+             margin-left: 70px;
+             margin-right: 70px;
+         }
+        .center {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            min-height: 100%;
+        }
+
+        #container {
+            -webkit-border-radius: 10px 10px 10px 10px;
+            border-radius: 10px 10px 10px 10px;
+            background: #fff;
+            padding: 30px;
+            width: 90%;
+            max-width: 680px;
+            position: relative;
+            padding: 0px;
+            -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+            box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        #text1{
+            font-size: 1.3em;
+        }
+        #whitespace{
+            padding: 25px;
+        }
+    </style>
+</head>
+<body>
+<div class="center">
+    <div id="container">
+        <h1 id="header">Find Issue <span id ="whitespace"></span><a href="/"><button id ="submit">Home</button></a>   </h1>
+
+        <div id= "text1">Enter the following informaton to find an issue:</div>
+        <div>(Please fill out at least one field)</div>
+        <form th:action="@{/find}" th:object="${data}" method="post">
+            <div> Issue ID #: <input type="number" min="1" step="1" name="id"></div>
+            <div>Problem Type:
+                <select name="problemType">
+                    <option>Any</option>
+                    <option>Road Hazard</option>
+                    <option>Criminal Act</option>
+                    <option>Environmental Hazard</option>
+                    <option>Vehicle Damage</option>
+                    <option>Fire</option>
+                    <option>Water Damage</option>
+                    <option>Other</option>
+                </select></div>
+            <div>Location: Within <input type="number" name="distance"> km of</div>
+            <div>Latitude <input id="latitude" type="number" step="any" min="-180" max="180" name="latitude"> Longitude <input id="longitude" type="number" step="any" min="-180" max="180" name="longitude"></div>
+            <div> <button type="button" id = "current_location" return false>Use Current Location</button></div>
+            <div id="map"></div>
+            <div>Problem Description: <input name="problemDescription"></div>
+            <!--<div>Image: <input name="image" type="file"></div>-->
+            <div>Current Status:
+                <select name="status">
+                    <option value="Any">Any</option>
+                    <option value="Open">Open</option>
+                    <option value="In Progress">In Progress</option>
+                </select>
+            </div>
+            <div>Time Reported: Between <input type="datetime-local" name="startTime"> and <input type="datetime-local" name="endTime"></div>
+            <div id="button-container"><input id="submit" type="submit"></div>
+        </form>
+    </div>
+</div>
+<script >
+//Set up some of our variables.
+var map; //Will contain map object.
+var marker = false; ////Has the user plotted their location marker?
+
+//Function called to initialize / create the map.
+//This is called when the page has loaded.
+var x = document.getElementById("latitude");
+var y = document.getElementById("longitude");
+
+function initMap() {
+
+    //The center location of our map.
+    var centerOfMap = new google.maps.LatLng(40.77864253611675, -73.9610921231848);
+
+    //Map options.
+    var options = {
+      center: centerOfMap, //Set center.
+      zoom: 3 //The zoom value.
+    };
+
+    //Create the map object.
+    map = new google.maps.Map(document.getElementById('map'), options);
+
+    //Listen for any clicks on the map.
+
+    document.getElementById("current_location").addEventListener("click", function() {
+        console.log("current location")
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(getPosition);
+
+          } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+          }
+
+    });
+
+
+function getPosition(position) {
+    //document.getElementById("map").click();
+
+    //Map options.
+
+    x.value = position.coords.latitude;
+    y.value = position.coords.longitude;
+    console.log(x.value);
+    var position = new google.maps.LatLng(x.value,y.value);
+    //var currentLocation = {lat: x, lng: y};
+    if(marker === false){
+        console.log("marker")
+        //Create the marker.
+        marker = new google.maps.Marker({
+            position: position,
+             map:map,
+            draggable: true //make it draggable
+        });
+        map.setCenter(position);
+        map.setZoom(3);
+
+    } else{
+        marker.setPosition(position)
+        map.setCenter(position);
+        map.setZoom(3);
+        //Marker has already been added, so just change its location.
+
+}
+    //Get the marker's location.
+    }
+
+    google.maps.event.addListener(map, 'click', function(event) {
+        console.log("first?")
+        console.log(event);
+        //Get the location that the user clicked.
+        var clickedLocation = event.latLng;
+        console.log(event.latLng)
+        //If the marker hasn't been added.
+        if(marker === false){
+            //Create the marker.
+            marker = new google.maps.Marker({
+                position: clickedLocation,
+                map: map,
+                draggable: true //make it draggable
+            });
+            //Listen for drag events!
+            google.maps.event.addListener(marker, 'dragend', function(event){
+                markerLocation();
+            });
+        } else{
+            //Marker has already been added, so just change its location.
+            marker.setPosition(clickedLocation);
+    }
+        //Get the marker's location.
+       markerLocation();
+   });
+}
+
+//This function will get the marker's current location and then add the latitude/long
+//values to our textfields so that we can save the location.
+function markerLocation(){
+    //Get location.
+    var currentLocation = marker.getPosition();
+    //Add latitude and longitude values to a field that we can save.
+    document.getElementById('latitude').value = currentLocation.lat(); //latitude
+    document.getElementById('longitude').value = currentLocation.lng(); //longitude
+}
+
+
+//Load the map when the page has finished loading.
+google.maps.event.addDomListener(window, 'load', initMap());
+</script>
+</body>
+</html>
