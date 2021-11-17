@@ -1,5 +1,5 @@
 # Projects
-This repository contains notable projects from Yeshiva University courses and outside of school.
+This repository contains notable coding projects I have created.
 
 AWS Summer Project:
 
